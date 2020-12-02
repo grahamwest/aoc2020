@@ -46,7 +46,7 @@ public class ReportRepair {
             expensesSet.add(n);
         }
 
-        return findMultipleOf(expensesSet, 2020, 3).get();
+        return findMultipleOf(expensesSet, 2020, 3).orElseThrow();
     }
 
     public static void main(String... args) {

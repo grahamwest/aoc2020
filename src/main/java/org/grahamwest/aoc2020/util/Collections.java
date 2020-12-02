@@ -2,6 +2,8 @@ package org.grahamwest.aoc2020.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Collections {
 
@@ -15,6 +17,10 @@ public class Collections {
         int i = list.indexOf(value);
         list.remove(i);
         return list;
+    }
+
+    public static <T> List<T> toList(Stream<T> stream) {
+        return stream.collect(Collectors.toList());
     }
 
 }
