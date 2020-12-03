@@ -23,4 +23,8 @@ public class Collections {
         return stream.collect(Collectors.toList());
     }
 
+    public static <T> T[] array(T... values) {
+        return values;
+    }
+
 }
