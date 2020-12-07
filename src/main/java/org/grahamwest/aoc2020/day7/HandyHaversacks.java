@@ -10,15 +10,15 @@ import static org.grahamwest.aoc2020.util.Collections.toList;
 
 public class HandyHaversacks {
 
-    private Stream<BagRelationship> parseRules(Stream<String> input) {
-        return input.map(BagRelationship::from);
+    private Stream<BagRule> parseRules(Stream<String> input) {
+        return input.map(BagRule::from);
     }
 
     private int countParentBags(Stream<String> input) {
         Map<String, Set<String>> childToParentBagColors = new HashMap<>();
-        List<BagRelationship> bags = toList(parseRules(input));
+        List<BagRule> bags = toList(parseRules(input));
 
-        for (BagRelationship rel : bags) {
+        for (BagRule rel : bags) {
             for (String child: rel.getChildren().keySet()) {
                 childToParentBagColors.computeIfAbsent(child, x -> new HashSet<>()).add(rel.getColor());
             }
@@ -36,9 +36,9 @@ public class HandyHaversacks {
 
     private int countChildBags(Stream<String> input) {
         Map<String, Set<BagRequirement>> parentToChild = new HashMap<>();
-        List<BagRelationship> bags = toList(parseRules(input));
+        List<BagRule> bags = toList(parseRules(input));
 
-        for (BagRelationship rel : bags) {
+        for (BagRule rel : bags) {
             Set<BagRequirement> children = rel.getChildren().entrySet().stream()
                     .map( e -> new BagRequirement(e.getKey(), e.getValue()) )
                     .collect(Collectors.toSet());
@@ -57,6 +57,10 @@ public class HandyHaversacks {
 
     public static void main(String... args) {
         Stream<String> input = PuzzleInput.lines("day7/input.txt");
+        int numParents = new HandyHaversacks().countParentBags(input);
+        System.out.println(numParents);
+
+        input = PuzzleInput.lines("day7/input.txt");
         int numBags = new HandyHaversacks().countChildBags(input);
         System.out.println(numBags);
     }
