@@ -46,4 +46,8 @@ public class Machine {
         return this.state;
     }
 
+    public boolean isHalted() {
+        return this.state.isHalted();
+    }
+
 }

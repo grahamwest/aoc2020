@@ -3,6 +3,7 @@ package org.grahamwest.aoc2020.vm;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -29,6 +30,22 @@ public class Program {
 
     public int size() {
         return this.instructions.size();
+    }
+
+    public Program cloneWithModification(int index, Instruction replacement) {
+
+        List<Instruction> clone = new ArrayList<>(instructions.size());
+        for (int i = 0; i < instructions.size(); i++) {
+
+            if (i == index) {
+                clone.add(i, replacement);
+            } else {
+                clone.add(i, instructions.get(i));
+            }
+
+        }
+
+        return new Program(clone);
     }
 
 }

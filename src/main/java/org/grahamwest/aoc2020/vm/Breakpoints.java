@@ -13,7 +13,14 @@ public class Breakpoints {
 
     public static BiPredicate<State, Instruction> logger(final Machine vm) {
         return (s,i) -> {
-            System.out.println(vm);
+            System.out.println(vm + " | " + i);
+            return false;
+        };
+    }
+
+    public static BiPredicate<State, Instruction> logger(final Machine vm, StringBuilder sb) {
+        return (s,i) -> {
+            sb.append(vm + " | " + i + "\n");
             return false;
         };
     }

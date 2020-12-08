@@ -3,6 +3,7 @@ package org.grahamwest.aoc2020.vm;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import java.util.function.BiConsumer;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
+@ToString
 public class Instruction {
 
     private static final Map<String, BiConsumer<State, Instruction>> implementations = Map.of(
@@ -20,6 +22,8 @@ public class Instruction {
 
     String opcode;
     List<String> operands;
+
+    @ToString.Exclude
     BiConsumer<State, Instruction> executor;
 
     public static Instruction from(String[] op) {
