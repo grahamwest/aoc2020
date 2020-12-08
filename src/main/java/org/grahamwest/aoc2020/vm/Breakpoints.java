@@ -1,5 +1,7 @@
 package org.grahamwest.aoc2020.vm;
 
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.BiPredicate;
@@ -11,16 +13,13 @@ public class Breakpoints {
         return (s,i) -> !visitedLineNumbers.add(s.getPc());
     }
 
-    public static BiPredicate<State, Instruction> logger(final Machine vm) {
-        return (s,i) -> {
-            System.out.println(vm + " | " + i);
-            return false;
-        };
+    public static BiPredicate<State, Instruction> logger() {
+        return logger(System.out);
     }
 
-    public static BiPredicate<State, Instruction> logger(final Machine vm, StringBuilder sb) {
+    public static BiPredicate<State, Instruction> logger(PrintStream out) {
         return (s,i) -> {
-            sb.append(vm + " | " + i + "\n");
+            out.append(s + " | " + i + "\n");
             return false;
         };
     }
