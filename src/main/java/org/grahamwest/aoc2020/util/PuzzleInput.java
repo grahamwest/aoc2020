@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collector;
 import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 import static org.grahamwest.aoc2020.util.Collections.toList;
@@ -41,6 +42,10 @@ public class PuzzleInput {
 
     public static IntStream linesInt(String fileName) {
         return lines(fileName).mapToInt(Integer::valueOf);
+    }
+
+    public static LongStream linesLong(String fileName) {
+        return lines(fileName).mapToLong(Long::valueOf);
     }
 
 }
