@@ -2,11 +2,14 @@ package org.grahamwest.aoc2020.util;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
-@Getter @AllArgsConstructor
+@Getter
+@AllArgsConstructor
+@ToString
 public class Coordinate {
-    final int x;
-    final int y;
+    protected int x;
+    protected int y;
 
     public static Coordinate from (int x, int y) {
         return new Coordinate(x, y);

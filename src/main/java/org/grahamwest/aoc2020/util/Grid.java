@@ -5,8 +5,8 @@ import lombok.EqualsAndHashCode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.BiFunction;
-import java.util.function.Function;
+import java.util.Optional;
+import java.util.function.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -32,6 +32,12 @@ public class Grid<T> {
 
     public int height() {
         return data.size();
+    }
+
+    public boolean contains(Coordinate c) {
+        int x = c.getX();
+        int y = c.getY();
+        return (x >= 0) && (x < width()) && (y >= 0) && (y < height());
     }
 
     public T get(int x, int y) {
@@ -66,6 +72,33 @@ public class Grid<T> {
         return diff(comparison).stream()
                 .mapToInt(b -> b ? 1 : 0)
                 .sum();
+    }
+
+    public Stream<T> find(BiPredicate<T, Coordinate> equalsFn, Supplier<Coordinate>... paths) {
+        Stream.Builder<T> builder = Stream.builder();
+
+        for (Supplier<Coordinate> p : paths) {
+            Optional<T> found = findInPath(equalsFn, p);
+            if (found.isPresent()) {
+                builder.add(found.get());
+            }
+        }
+
+        return builder.build();
+    }
+
+    public Optional<T> findInPath(BiPredicate<T, Coordinate> equalsFn, Supplier<Coordinate> path) {
+        Coordinate next = path.get();
+        if (! contains(next)) {
+            return Optional.empty();
+        }
+
+        T value = get(next.getX(), next.getY());
+        if (equalsFn.test(value, Coordinate.from(next.getX(), next.getY()))) {
+            return Optional.of(value);
+        } else {
+            return findInPath(equalsFn, path);
+        }
     }
 
     public <R> Grid<R> transform(BiFunction<T, Coordinate, R> fn) {

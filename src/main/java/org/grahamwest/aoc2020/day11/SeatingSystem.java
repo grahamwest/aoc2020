@@ -1,8 +1,12 @@
 package org.grahamwest.aoc2020.day11;
 
+import org.grahamwest.aoc2020.util.Coordinate;
 import org.grahamwest.aoc2020.util.Grid;
+import org.grahamwest.aoc2020.util.MutableCoordinate;
 import org.grahamwest.aoc2020.util.PuzzleInput;
 
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 public class SeatingSystem {
@@ -49,19 +53,49 @@ public class SeatingSystem {
         });
     }
 
-    public static int part1(Stream<String> input) {
+    private static Supplier<Coordinate> dir(Coordinate start, final int x, final int y) {
+        MutableCoordinate coord = MutableCoordinate.from(start);
+        return () -> {
+            coord.set( coord.getX() + x, coord.getY() + y);
+            return coord.immutable();
+        };
+    }
+
+    public static Grid<Seat> applyRulesPart2(final Grid<Seat> grid) {
+        return grid.transform( (seat, coord) -> {
+            int occupied = (int) grid.find(
+                    (s, c) -> s == Seat.OCCUPIED || s == Seat.EMPTY,
+                    dir(coord, 0, -1),
+                    dir(coord, 1, -1),
+                    dir(coord, 1, 0),
+                    dir(coord, 1, 1),
+                    dir(coord, 0, 1),
+                    dir(coord, -1, 1),
+                    dir(coord, -1, 0),
+                    dir(coord, -1, -1)
+            ).filter( s -> s == Seat.OCCUPIED ).count();
+
+            if (seat == Seat.EMPTY && occupied == 0) {
+                return Seat.OCCUPIED;
+            }
+
+            if (seat == Seat.OCCUPIED && occupied >= 5) {
+                return Seat.EMPTY;
+            }
+
+            return seat;
+        });
+    }
+
+    public static int countOccupiedWhenStable(Stream<String> input, Function<Grid<Seat>, Grid<Seat>> rules) {
         Grid<Seat> grid = parse(input);
 
-        Grid<Seat> transformed = applyRules(grid);
-
-        System.out.println(grid);
-        System.out.println(transformed);
-        System.out.println(transformed.countNeighbours(0,0, Seat.OCCUPIED));
+        Grid<Seat> transformed = rules.apply(grid);
 
         while ( !transformed.equals(grid) ) {
+            System.out.println(grid);
             grid = transformed;
-            transformed = applyRules(transformed);
-            System.out.println(transformed);
+            transformed = rules.apply(transformed);
         }
 
         return grid.count(Seat.OCCUPIED);
@@ -70,7 +104,7 @@ public class SeatingSystem {
     public static void main(String... args) {
         Stream<String> input = PuzzleInput.lines("day11/input.txt");
 
-        System.out.println( part1(input) );
+        System.out.println( countOccupiedWhenStable(input, SeatingSystem::applyRulesPart2) );
 
     }
 
