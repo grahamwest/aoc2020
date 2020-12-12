@@ -53,7 +53,7 @@ public class SeatingSystem {
         });
     }
 
-    private static Supplier<Coordinate> dir(Coordinate start, final int x, final int y) {
+    private static Supplier<Coordinate> path(Coordinate start, final int x, final int y) {
         MutableCoordinate coord = MutableCoordinate.from(start);
         return () -> {
             coord.set( coord.getX() + x, coord.getY() + y);
@@ -65,14 +65,14 @@ public class SeatingSystem {
         return grid.transform( (seat, coord) -> {
             int occupied = (int) grid.find(
                     (s, c) -> s == Seat.OCCUPIED || s == Seat.EMPTY,
-                    dir(coord, 0, -1),
-                    dir(coord, 1, -1),
-                    dir(coord, 1, 0),
-                    dir(coord, 1, 1),
-                    dir(coord, 0, 1),
-                    dir(coord, -1, 1),
-                    dir(coord, -1, 0),
-                    dir(coord, -1, -1)
+                    path(coord, 0, -1),
+                    path(coord, 1, -1),
+                    path(coord, 1, 0),
+                    path(coord, 1, 1),
+                    path(coord, 0, 1),
+                    path(coord, -1, 1),
+                    path(coord, -1, 0),
+                    path(coord, -1, -1)
             ).filter( s -> s == Seat.OCCUPIED ).count();
 
             if (seat == Seat.EMPTY && occupied == 0) {
