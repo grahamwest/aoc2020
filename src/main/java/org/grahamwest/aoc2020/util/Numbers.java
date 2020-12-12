@@ -23,4 +23,8 @@ public class Numbers {
                 .orElse(false);
     }
 
+    public static int clamp(int n, int lower, int upper) {
+        return Math.max(lower, Math.min(upper, n));
+    }
+
 }
